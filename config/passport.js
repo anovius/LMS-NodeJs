@@ -15,3 +15,5 @@ passport.use(new LocalStrategy((email, password, done) => {
         })
     }
 ))
+
+module.exports = passport

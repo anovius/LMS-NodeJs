@@ -1,10 +1,13 @@
-const express = require('express');
+const express = require('express')
 const Router = express.Router()
-const passport = require('passport');
+const passport = require('../../config/passport')
 
-Router.post('/login', (req, res, next) => {
-    console.log('ok mn agya')
+Router.use(passport.initialize())
+Router.use(passport.session())
+
+Router.post('/login', (req, res) => {
     passport.authenticate('local', { session: false}), (err, user, info) => {
+        console.log('here')
         if(err) return next(err)
         if(user){
             res.send('Logged In Successfully!')

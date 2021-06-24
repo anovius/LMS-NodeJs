@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
-const mexp = require('mongoose-elasticsearch-xp').v2
+const mongoosastic = require('mongoosastic')
 const bcrypt = require('bcrypt');
 const saltRounds = 10
 
@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
 })
 
 userSchema.plugin(uniqueValidator, {message: 'Error, expected {PATH} to be unique.'})
-userSchema.plugin(mexp)
+userSchema.plugin(mongoosastic)
 
 
 

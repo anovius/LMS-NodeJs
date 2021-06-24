@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
-const mexp = require('mongoose-elasticsearch-xp').v2
+const mongoosastic = require('mongoosastic')
 
 const bookSchema = mongoose.Schema({
     title: {type: String, required: true},
@@ -10,7 +10,7 @@ const bookSchema = mongoose.Schema({
 })
 
 bookSchema.plugin(uniqueValidator)
-bookSchema.plugin(mexp)
+bookSchema.plugin(mongoosastic)
 
 const Book = mongoose.model('Book', bookSchema)
 module.exports = Book
