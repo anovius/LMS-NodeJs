@@ -26,5 +26,9 @@ userSchema.methods.comparePassword = function(pass){
     return bcrypt.compareSync(pass, this.password)
 }
 
+userSchema.methods.generateToken = function(){
+    
+}
+
 const User = mongoose.model('User', userSchema)
 module.exports = User
