@@ -7,7 +7,9 @@ passport.use(localStrategy)
 Router.use(passport.initialize())
 
 Router.post('/login', passport.authenticate('local', {session:false}), (req, res) => {
-    res.send("Logged In")
+    req.user.generateToken()
+    console.log(req.user.token)
+    res.send("ok")
 })
 
 module.exports = Router

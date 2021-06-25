@@ -1,8 +1,9 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
-const mongoosastic = require('mongoosastic')
+//const mongoosastic = require('mongoosastic')
 const bcrypt = require('bcrypt');
 const saltRounds = 10
+const jsonwebtoken = require('jsonwebtoken');
 
 const userSchema = mongoose.Schema({
     name: {type: String, required: true},
@@ -12,7 +13,7 @@ const userSchema = mongoose.Schema({
 })
 
 userSchema.plugin(uniqueValidator, {message: 'Error, expected {PATH} to be unique.'})
-userSchema.plugin(mongoosastic)
+//userSchema.plugin(mongoosastic)
 
 
 
@@ -27,7 +28,7 @@ userSchema.methods.comparePassword = function(pass){
 }
 
 userSchema.methods.generateToken = function(){
-    
+    this.token = jsonwebtoken.sign({user: this.email}, 'shhhhh')
 }
 
 const User = mongoose.model('User', userSchema)
