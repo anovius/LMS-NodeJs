@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e15bd8f7-6059-4d9b-a848-7b680d71b0ab",
+		"_postman_id": "8558e665-9c51-44f4-ada8-30abfddccb95",
 		"name": "LMS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"admin@gmail.com\",\r\n    \"password\":\"admmin123\"\r\n}",
+							"raw": "{\r\n    \"email\":\"admin@gmail.com\",\r\n    \"password\":\"admin123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -36,6 +36,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Sign Up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"alifarooq\",\n    \"email\":\"alifarooq@gmail.com\",\n    \"password\":\"ali123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/users/signUp",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"users",
+								"signUp"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -46,7 +75,13 @@
 					"name": "AddBook",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NjI5NDg2fQ.ysa6e_JA5n4WkSJ0IaT6KyaS9CxjRw4mgLGZkgFyWNs",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"title\":\"A Time to Kill by John Grisham\",\r\n    \"ISBN\":\"9898\",\r\n    \"authors\": [\"60d4e7706ba5c12fc4cde5c1\", \"60d4e7706ba5c12fc4cde5c2\"]\r\n}",
@@ -73,11 +108,29 @@
 				},
 				{
 					"name": "SearchBook",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWxpZmFyb29xQGdtYWlsLmNvbSIsImlhdCI6MTYyNDYyMDg1NX0.4pj3DeTWs4szIr8NFnRfJoYQ1TMrqITqJD9MqVDCs9w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWxpZmFyb29xQGdtYWlsLmNvbSIsImlhdCI6MTYyNDYyMDg1NX0.4pj3DeTWs4szIr8NFnRfJoYQ1TMrqITqJD9MqVDCs9w\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "localhost:3000/api/books/search/\"\"",
+							"raw": "localhost:3000/api/books/search/Direct Infrastructure Architect",
 							"host": [
 								"localhost"
 							],
@@ -86,7 +139,7 @@
 								"api",
 								"books",
 								"search",
-								"\"\""
+								"Direct Infrastructure Architect"
 							]
 						}
 					},
