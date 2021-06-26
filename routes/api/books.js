@@ -2,8 +2,9 @@ const express = require('express')
 const Router = express.Router()
 const mongoose = require('mongoose')
 const Book = require('../../models/Book')
+const auth = require('../../middlewares/auth')
 
-Router.post('/addBook', (req, res) => {
+Router.post('/addBook', auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
     var authors = []
 
     for(var i=0; i<req.body.authors.length; i++)
@@ -24,7 +25,7 @@ Router.post('/addBook', (req, res) => {
     })
 })
 
-Router.get('/search/:title', (req, res) => {
+Router.get('/search/:title', auth.isToken, auth.isUser, (req, res) => {
     Book.findOne({title: req.params.title}, (err, book) => {
         if(!err){
             res.status(200).send(book)

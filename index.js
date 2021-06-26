@@ -1,14 +1,14 @@
 const express = require('express');
 const app = express()
 const mongoose = require('mongoose')
+const env_vars = require('./config')
 
-const dbLink = 'mongodb://localhost/LMS'
-mongoose.connect(dbLink, {
+mongoose.connect(env_vars.dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: true,
     useCreateIndex: true
-}).then((result) => app.listen(3000 || process.env.PORT, () => {
+}).then((result) => app.listen(env_vars.port || process.env.PORT, () => {
     console.log('Listening ...');
 })).catch((err) => console.log(err))
 

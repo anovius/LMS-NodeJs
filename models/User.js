@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
-//const mongoosastic = require('mongoosastic')
+const mongoosastic = require('mongoosastic')
 const bcrypt = require('bcrypt');
 const saltRounds = 10
 const jsonwebtoken = require('jsonwebtoken');
@@ -9,11 +9,11 @@ const userSchema = mongoose.Schema({
     name: {type: String, required: true},
     email: {type: String, require: true, unique: true},
     password: {type: String, required: true},
-    userType: {type: Number, require: true},
+    userType: {type: Number, require: true, default: 1},
 })
 
 userSchema.plugin(uniqueValidator, {message: 'Error, expected {PATH} to be unique.'})
-//userSchema.plugin(mongoosastic)
+userSchema.plugin(mongoosastic)
 
 
 

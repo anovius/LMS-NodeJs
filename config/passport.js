@@ -10,7 +10,6 @@ const localStrategy = new LocalStrategy({usernameField: 'email', passwordField: 
             if(!user.comparePassword(password)){
                 return done(null, false, {message: 'Incorrect Password'})
             }
-            req.user = user
             return done(null, user)
         })
     }
