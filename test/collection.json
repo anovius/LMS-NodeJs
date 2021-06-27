@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0d086c1e-09ae-4fc9-8b35-62a4c873bef6",
+		"_postman_id": "42301fde-4075-4119-8a9f-d062b085603a",
 		"name": "LMS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -10,8 +10,11 @@
 			"item": [
 				{
 					"name": "Login",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -388,15 +391,15 @@
 	"variable": [
 		{
 			"key": "appUrl",
-			"value": ""
+			"value": "localhost:3000"
 		},
 		{
 			"key": "tokenAdmin",
-			"value": ""
+			"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0ODI2Mzk1fQ.rcoUTR5NLSNDgT9Ss5onIXPTk18z704NjDGGygZY4mA"
 		},
 		{
 			"key": "tokenUser",
-			"value": ""
+			"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNtYW5AZ21haWwuY29tIiwiaWF0IjoxNjI0ODI2NDE4fQ.x5ue-D_CYgRoJFPNjn9GwqQpUxCZ8keDI-OBc8ETTVI"
 		},
 		{
 			"key": "name",
