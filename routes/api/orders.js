@@ -45,11 +45,19 @@ Router.post('/placeOrder', auth.isToken, auth.isUser, (req, res) =>{
 
 Router.put('/return',  auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
     const orderId = req.body.orderId
-    Order.findById(mongoose.Types.ObjectId(orderId), (err, order) => {
+    Order.findById(mongoose.Types.ObjectId(orderId))
+    .populate('bookId')
+    .exec((err, order) => {
         if(!err && order !== null){
-            console.log(Date.now() + "\n" + order.expiryDate)
-            if(Date.now < order.expiryDate)
-                console.log(order.expiryDate)
+           var today = new Date()
+           var fine = 0
+           var diff = Math.round((order.expiryDate-today)/(1000*60*60*24))
+           if(diff < 0){
+               fine = 500 * diff * -1
+           }
+           order.bookId.quantity += 1
+           order.bookId.save()
+           res.status(302).send({message: 'Book Returned Record Updated!', fineToPay: fine + ' PKR'})
         }
         else{
             res.status(203).send({message:'Order not found'})

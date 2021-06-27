@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"usman@gmail.com\",\r\n    \"password\":\"usman123\"\r\n}",
+							"raw": "{\r\n    \"email\":\"{{email}}\",\r\n    \"password\":\"{{password}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -23,11 +23,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/users/login",
+							"raw": "{{appUrl}}/api/users/login",
 							"host": [
-								"localhost"
+								"{{appUrl}}"
 							],
-							"port": "3000",
 							"path": [
 								"api",
 								"users",
@@ -44,7 +43,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\":\"alifarooq\",\n    \"email\":\"alifarooq@gmail.com\",\n    \"password\":\"ali123\"\n}",
+							"raw": "{\n    \"name\":\"{{name}}\",\n    \"email\":\"{{email}}\",\n    \"password\":\"{{password}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -73,7 +72,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NzQzNTc3fQ.lOgCRXpVa994y6QlJC-rteAh8HSI7kW-TefBOGlH2dE",
+								"value": "{{tokenAdmin}}",
 								"type": "text"
 							}
 						],
@@ -104,7 +103,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNtYW5AZ21haWwuY29tIiwiaWF0IjoxNjI0Nzg4NTA1fQ.R2FWaDCIdlenfA5zpseoxxmgFIVDon0ochNDxaaBoNI",
+								"value": "{{tokenUser}}",
 								"type": "text"
 							}
 						],
@@ -129,13 +128,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWxpZmFyb29xQGdtYWlsLmNvbSIsImlhdCI6MTYyNDcyMTI2MH0.SmEWYigQute-cAp5UuAClq2yDc3-NU3co_YddBt6Apw",
+								"value": "{{tokenAdmin}}",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\":\"A Time to Kill by John Grisham\",\r\n    \"ISBN\":\"9898\",\r\n    \"authors\": [\"60d4e7706ba5c12fc4cde5c1\", \"60d4e7706ba5c12fc4cde5c2\"]\r\n}",
+							"raw": "{\r\n    \"title\":\"{{title}}\",\r\n    \"ISBN\":\"{{ISBN}}\",\r\n    \"authors\": {{authors}}\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -167,7 +166,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NzIwOTM1fQ.mQOZ9d4K27z5oIRnp-xANTMfn_aBVGms5LieRATtPfQ",
+								"value": "{{tokenUser}}",
 								"type": "text"
 							}
 						],
@@ -203,13 +202,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NzQzNTc3fQ.lOgCRXpVa994y6QlJC-rteAh8HSI7kW-TefBOGlH2dE",
+								"value": "{{tokenAdmin}}",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\":\"60d4e77f4f7f943298bbd94b\",\r\n    \"title\": \"Global Accounts Orchestrator Updated\",\r\n    \"isAvailable\": false,\r\n    \"ISBN\": \"9893\"\r\n}",
+							"raw": "{\r\n    \"id\":\"{{bookId}}\",\r\n    \"title\": \"{{title}}\",\r\n    \"ISBN\": \"{{ISBN}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -243,7 +242,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NzQzNTc3fQ.lOgCRXpVa994y6QlJC-rteAh8HSI7kW-TefBOGlH2dE",
+								"value": "{{tokenAdmin}}",
 								"type": "text"
 							}
 						],
@@ -274,7 +273,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NzQzNTc3fQ.lOgCRXpVa994y6QlJC-rteAh8HSI7kW-TefBOGlH2dE",
+								"value": "{{tokenAdmin}}",
 								"type": "text"
 							}
 						],
@@ -300,13 +299,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NzIwOTM1fQ.mQOZ9d4K27z5oIRnp-xANTMfn_aBVGms5LieRATtPfQ",
+								"value": "{{tokenUser}}",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"bookId\":\"\"\r\n}",
+							"raw": "{\r\n    \"ISBN\":\"{{orderISBN}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -335,13 +334,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NzQzNTc3fQ.lOgCRXpVa994y6QlJC-rteAh8HSI7kW-TefBOGlH2dE",
+								"value": "{{tokenAdmin}}",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"orderId\":\"60d848b7a25ae622d01b56de\"\r\n}",
+							"raw": "{\r\n    \"orderId\":\"{{orderId}}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -364,6 +363,76 @@
 					"response": []
 				}
 			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "appUrl",
+			"value": ""
+		},
+		{
+			"key": "tokenAdmin",
+			"value": ""
+		},
+		{
+			"key": "tokenUser",
+			"value": ""
+		},
+		{
+			"key": "name",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "bookId",
+			"value": ""
+		},
+		{
+			"key": "titile",
+			"value": ""
+		},
+		{
+			"key": "ISBN",
+			"value": ""
+		},
+		{
+			"key": "authors",
+			"value": ""
+		},
+		{
+			"key": "orderISBN",
+			"value": ""
+		},
+		{
+			"key": "orderId",
+			"value": ""
 		}
 	]
 }
