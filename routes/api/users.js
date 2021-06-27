@@ -3,6 +3,7 @@ const Router = express.Router()
 const passport = require('passport')
 const localStrategy = require('../../config/passport')
 const User = require('../../models/User')
+const auth = require('../../middlewares/auth')
 
 passport.use(localStrategy)
 Router.use(passport.initialize())
@@ -26,6 +27,15 @@ Router.post('/signUp', (req, res) => {
             console.log(err)
             res.status(203).send({message: 'Email already in use'})
         }
+    })
+})
+
+Router.get('/getAllUsers',  auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
+    User.find((err, data) => {
+        if(!err)
+            res.status(200).send(data)
+        else
+            res.send(203).send({message: 'Something went wrong'})
     })
 })
 

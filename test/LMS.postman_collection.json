@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8558e665-9c51-44f4-ada8-30abfddccb95",
+		"_postman_id": "0d086c1e-09ae-4fc9-8b35-62a4c873bef6",
 		"name": "LMS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"admin@gmail.com\",\r\n    \"password\":\"admin123\"\r\n}",
+							"raw": "{\r\n    \"email\":\"usman@gmail.com\",\r\n    \"password\":\"usman123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -65,6 +65,32 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NzQzNTc3fQ.lOgCRXpVa994y6QlJC-rteAh8HSI7kW-TefBOGlH2dE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/api/users/getAllUsers",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"users",
+								"getAllUsers"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -72,13 +98,38 @@
 			"name": "Book",
 			"item": [
 				{
+					"name": "Get All Books",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNtYW5AZ21haWwuY29tIiwiaWF0IjoxNjI0Nzg4NTA1fQ.R2FWaDCIdlenfA5zpseoxxmgFIVDon0ochNDxaaBoNI",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/api/books",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "AddBook",
 					"request": {
 						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NjI5NDg2fQ.ysa6e_JA5n4WkSJ0IaT6KyaS9CxjRw4mgLGZkgFyWNs",
+								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWxpZmFyb29xQGdtYWlsLmNvbSIsImlhdCI6MTYyNDcyMTI2MH0.SmEWYigQute-cAp5UuAClq2yDc3-NU3co_YddBt6Apw",
 								"type": "text"
 							}
 						],
@@ -116,13 +167,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWxpZmFyb29xQGdtYWlsLmNvbSIsImlhdCI6MTYyNDYyMDg1NX0.4pj3DeTWs4szIr8NFnRfJoYQ1TMrqITqJD9MqVDCs9w",
+								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NzIwOTM1fQ.mQOZ9d4K27z5oIRnp-xANTMfn_aBVGms5LieRATtPfQ",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWxpZmFyb29xQGdtYWlsLmNvbSIsImlhdCI6MTYyNDYyMDg1NX0.4pj3DeTWs4szIr8NFnRfJoYQ1TMrqITqJD9MqVDCs9w\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -130,7 +181,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/books/search/Direct Infrastructure Architect",
+							"raw": "localhost:3000/api/books/search/global program",
 							"host": [
 								"localhost"
 							],
@@ -139,7 +190,174 @@
 								"api",
 								"books",
 								"search",
-								"Direct Infrastructure Architect"
+								"global program"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Book",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NzQzNTc3fQ.lOgCRXpVa994y6QlJC-rteAh8HSI7kW-TefBOGlH2dE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":\"60d4e77f4f7f943298bbd94b\",\r\n    \"title\": \"Global Accounts Orchestrator Updated\",\r\n    \"isAvailable\": false,\r\n    \"ISBN\": \"9893\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/books/update",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"books",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Author",
+			"item": [
+				{
+					"name": "Get All Authors",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NzQzNTc3fQ.lOgCRXpVa994y6QlJC-rteAh8HSI7kW-TefBOGlH2dE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/api/authors/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"authors",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Gett All Orders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NzQzNTc3fQ.lOgCRXpVa994y6QlJC-rteAh8HSI7kW-TefBOGlH2dE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/api/orders/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"orders",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Place Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NzIwOTM1fQ.mQOZ9d4K27z5oIRnp-xANTMfn_aBVGms5LieRATtPfQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"bookId\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/orders/placeOrder",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"orders",
+								"placeOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Return Book",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0NzQzNTc3fQ.lOgCRXpVa994y6QlJC-rteAh8HSI7kW-TefBOGlH2dE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orderId\":\"60d848b7a25ae622d01b56de\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/orders/return",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"orders",
+								"return"
 							]
 						}
 					},

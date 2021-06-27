@@ -12,20 +12,22 @@ mongoose.connect(dbLink, {
     useCreateIndex: true
 })
     .then( async (result) => {
-        const books = await Book.find().select('_id isAvailable').exec()
+        const books = await Book.find().select('_id quantity').exec()
         const users = await User.find().select('_id').exec()
         for(var i=0; i<1000; i++){
             var randomBook = Math.floor(Math.random() * 900)
             var randomUser = Math.floor(Math.random() * 100)
-            if(books[randomBook].isAvailable){
-                books[randomBook].isAvailable = false
-                books[randomBook].save()
+            if(books[randomBook].quantity !== 0){
+                Book.updateOne(books[randomBook], {$inc : {quantity: -1}})
                 const newOrder = new Order({
                     userId: users[randomUser]._id,
                     bookId: books[randomBook]._id 
                 })
                 newOrder.save().then((result) => console.log('Order Added!'))
                 .catch((err) => console.log('Can not add Order'))
+            }
+            else{
+                console.log('Not enough quantity')
             }
         }
     })

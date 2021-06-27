@@ -5,7 +5,8 @@ const mongoosastic = require('mongoosastic')
 const orderSchema = mongoose.Schema({
     userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     bookId: {type: mongoose.Schema.Types.ObjectId, ref: 'Book'},
-    orderDate: {type: Date, default: Date.now}
+    orderDate: {type: Date, default: Date.now},
+    expiryDate: {type: Date, default: new Date(+new Date() + 5*24*60*60*1000)}
 })
 
 orderSchema.plugin(uniqueValidator)

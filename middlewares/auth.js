@@ -32,7 +32,6 @@ const isUser = function(req, res, next){
 }
 
 const isAdmin = function(req, res, next){
-    console.log(req.user)
     if(req.user.userType === 0){
         next()
     }
