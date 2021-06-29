@@ -10,6 +10,23 @@
 			"item": [
 				{
 					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful Login request\", function () {",
+									"    pm.response.to.have.status(200)",
+									"});",
+									"",
+									"var bodyData = pm.response.json()",
+									"var token = \"Token \" + bodyData.token",
+									"pm.environment.set(\"tokenAdmin\", token)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -18,7 +35,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"{{email}}\",\r\n    \"password\":\"{{password}}\"\r\n}",
+							"raw": "{\r\n    \"email\":\"admin@gmail.com\",\r\n    \"password\":\"admin123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -41,12 +58,29 @@
 				},
 				{
 					"name": "Sign Up",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful Sign Up request\", function () {",
+									"    pm.response.to.have.status(201)",
+									"});",
+									"",
+									"var bodyData = pm.response.json()",
+									"var token = \"Token \" + bodyData.token",
+									"pm.environment.set(\"tokenUser\", token)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\":\"{{name}}\",\n    \"email\":\"{{email}}\",\n    \"password\":\"{{password}}\"\n}",
+							"raw": "{\n    \"name\":\"{{$randomFullName}}\",\n    \"email\":\"{{$randomEmail}}\",\n    \"password\":\"{{$randomPassword}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -54,11 +88,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/users/signUp",
+							"raw": "{{appUrl}}/api/users/signUp",
 							"host": [
-								"localhost"
+								"{{appUrl}}"
 							],
-							"port": "3000",
 							"path": [
 								"api",
 								"users",
@@ -70,6 +103,19 @@
 				},
 				{
 					"name": "Get All Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful get all user request\", function () {",
+									"    pm.response.to.have.status(200)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -80,11 +126,10 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/api/users/getAllUsers",
+							"raw": "{{appUrl}}/api/users/getAllUsers",
 							"host": [
-								"localhost"
+								"{{appUrl}}"
 							],
-							"port": "3000",
 							"path": [
 								"api",
 								"users",
@@ -101,6 +146,19 @@
 			"item": [
 				{
 					"name": "Get All Books",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful books request\", function () {",
+									"    pm.response.to.have.status(200)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -111,11 +169,10 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/api/books",
+							"raw": "{{appUrl}}/api/books",
 							"host": [
-								"localhost"
+								"{{appUrl}}"
 							],
-							"port": "3000",
 							"path": [
 								"api",
 								"books"
@@ -126,6 +183,19 @@
 				},
 				{
 					"name": "AddBook",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful add Book request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 203]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -137,7 +207,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\":\"{{title}}\",\r\n    \"ISBN\":\"{{ISBN}}\",\r\n    \"authors\": {{authors}}\r\n}",
+							"raw": "{\r\n    \"title\":\"{{$randomProductName}}\",\r\n    \"ISBN\":\"93434\",\r\n    \"authors\": [\"60dabf66ed5cf3ef93ae9e89\"]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -145,11 +215,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/books/addBook",
+							"raw": "{{appUrl}}/api/books/addBook",
 							"host": [
-								"localhost"
+								"{{appUrl}}"
 							],
-							"port": "3000",
 							"path": [
 								"api",
 								"books",
@@ -161,6 +230,19 @@
 				},
 				{
 					"name": "SearchBook",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successfull serach request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -183,11 +265,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/books/search/global program",
+							"raw": "{{appUrl}}/api/books/search/global program",
 							"host": [
-								"localhost"
+								"{{appUrl}}"
 							],
-							"port": "3000",
 							"path": [
 								"api",
 								"books",
@@ -200,6 +281,19 @@
 				},
 				{
 					"name": "Update Book",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successfull update request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -211,7 +305,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\":\"{{bookId}}\",\r\n    \"title\": \"{{title}}\",\r\n    \"ISBN\": \"{{ISBN}}\"\r\n}",
+							"raw": "{\r\n    \"id\":\"60dabf75764eb9efaedd189b\",\r\n    \"title\": \"Global Program Technician Updated\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -219,11 +313,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/books/update",
+							"raw": "{{appUrl}}/api/books/update",
 							"host": [
-								"localhost"
+								"{{appUrl}}"
 							],
-							"port": "3000",
 							"path": [
 								"api",
 								"books",
@@ -240,6 +333,19 @@
 			"item": [
 				{
 					"name": "Get All Authors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successfull authors request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -250,11 +356,10 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/api/authors/",
+							"raw": "{{appUrl}}/api/authors/",
 							"host": [
-								"localhost"
+								"{{appUrl}}"
 							],
-							"port": "3000",
 							"path": [
 								"api",
 								"authors",
@@ -271,6 +376,19 @@
 			"item": [
 				{
 					"name": "Gett All Orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successfull orders request\", function () {",
+									"    pm.response.to.have.status(302);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -281,11 +399,10 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/api/orders/",
+							"raw": "{{appUrl}}/api/orders/",
 							"host": [
-								"localhost"
+								"{{appUrl}}"
 							],
-							"port": "3000",
 							"path": [
 								"api",
 								"orders",
@@ -297,6 +414,19 @@
 				},
 				{
 					"name": "Place Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful place order request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([203, 201]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -308,7 +438,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"ISBN\":\"{{orderISBN}}\"\r\n}",
+							"raw": "{\r\n    \"ISBN\":\"72977\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -316,11 +446,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/orders/placeOrder",
+							"raw": "{{appUrl}}/api/orders/placeOrder",
 							"host": [
-								"localhost"
+								"{{appUrl}}"
 							],
-							"port": "3000",
 							"path": [
 								"api",
 								"orders",
@@ -332,6 +461,19 @@
 				},
 				{
 					"name": "Return Book",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful return bool request\", function () {",
+									"    pm.response.to.have.status(302)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -343,7 +485,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"orderId\":\"{{orderId}}}\"\r\n}",
+							"raw": "{\r\n    \"orderId\":\"60dabfc2ba2a4befff69d4e0\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -351,11 +493,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/orders/return",
+							"raw": "{{appUrl}}/api/orders/return",
 							"host": [
-								"localhost"
+								"{{appUrl}}"
 							],
-							"port": "3000",
 							"path": [
 								"api",
 								"orders",
@@ -389,18 +530,6 @@
 		}
 	],
 	"variable": [
-		{
-			"key": "appUrl",
-			"value": "localhost:3000"
-		},
-		{
-			"key": "tokenAdmin",
-			"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0ODI2Mzk1fQ.rcoUTR5NLSNDgT9Ss5onIXPTk18z704NjDGGygZY4mA"
-		},
-		{
-			"key": "tokenUser",
-			"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNtYW5AZ21haWwuY29tIiwiaWF0IjoxNjI0ODI2NDE4fQ.x5ue-D_CYgRoJFPNjn9GwqQpUxCZ8keDI-OBc8ETTVI"
-		},
 		{
 			"key": "name",
 			"value": ""

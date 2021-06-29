@@ -2,154 +2,222 @@
 
 import "./libs/shim/core.js";
 import "./libs/shim/urijs.js";
+import "./libs/shim/expect.js";
 import { group } from "k6";
 
-export let options = { maxRedirects: 4, iterations: 100 };
+export let options = { maxRedirects: 4 };
 
 const Request = Symbol.for("request");
 postman[Symbol.for("initial")]({
   options,
   collection: {
-    appUrl: "localhost:3000",
-    tokenAdmin:
-      "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjI0ODI2Mzk1fQ.rcoUTR5NLSNDgT9Ss5onIXPTk18z704NjDGGygZY4mA",
-    tokenUser:
-      "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNtYW5AZ21haWwuY29tIiwiaWF0IjoxNjI0ODI2NDE4fQ.x5ue-D_CYgRoJFPNjn9GwqQpUxCZ8keDI-OBc8ETTVI",
-    name: "",
-    email: "",
-    password: "",
-    bookId: "",
-    title: "",
-    ISBN: "",
-    authors: "",
-    orderISBN: "",
-    orderId: ""
   },
   environment: {
-    appUrl: "http://localhost:3000"
+    appUrl: "http://64.227.10.141",
+    tokenAdmin: "",
+    tokenUser: ""
   }
 });
 
 export default function() {
   group("User", function() {
+
+    postman[Request]({
+      name: "Main",
+      id: "caedc275-cd81-44c2-bb23-ba93d7dcaf3e",
+      method: "GET",
+      address: "{{appUrl}}",
+      data: '',
+      post(response) {
+        pm.test("Successful Home request", function() {
+          pm.response.to.have.status(200);
+        });
+        console.log(response.body)
+      }
+    });
+
     postman[Request]({
       name: "Login",
-      id: "6ff50c70-4b63-4c78-9bf3-8bfa26f24182",
+      id: "caedc275-cd81-44c2-bb23-ba93d7dcaf3e",
       method: "GET",
       address: "{{appUrl}}/api/users/login",
       data:
-        '{\r\n    "email":"{{email}}",\r\n    "password":"{{password}}"\r\n}'
-    });
-
-    postman[Request]({
-      name: "Sign Up",
-      id: "3471cf46-1610-4bcb-84a4-62ff6afa4e32",
-      method: "POST",
-      address: "localhost:3000/api/users/signUp",
-      data:
-        '{\n    "name":"{{name}}",\n    "email":"{{email}}",\n    "password":"{{password}}"\n}'
-    });
-
-    postman[Request]({
-      name: "Get All Users",
-      id: "1aa23252-6052-4885-b219-594958409bef",
-      method: "GET",
-      address: "localhost:3000/api/users/getAllUsers",
-      headers: {
-        Authorization: "{{tokenAdmin}}"
-      }
-    });
-  });
-
-  group("Book", function() {
-    postman[Request]({
-      name: "Get All Books",
-      id: "683e3ec5-667a-4901-8d70-af06e2c231fd",
-      method: "GET",
-      address: "localhost:3000/api/books",
-      headers: {
-        Authorization: "{{tokenUser}}"
+        '{\r\n    "email":"admin@gmail.com",\r\n    "password":"admin123"\r\n}',
+      post(response) {
+        pm.test("Successful Login request", function() {
+          pm.response.to.have.status(200);
+        });
+        console.log(request.body)
+        console.log(response.body)
+        var bodyData = response.json();
+        var token = "Token " + bodyData.token;
+        pm.environment.set("tokenAdmin", token);
       }
     });
 
-    postman[Request]({
-      name: "AddBook",
-      id: "abc370fa-619d-4957-a293-01ffe662ea04",
-      method: "POST",
-      address: "localhost:3000/api/books/addBook",
-      data:
-        '{\r\n    "title":"{{title}}",\r\n    "ISBN":"{{ISBN}}",\r\n    "authors": {{authors}}\r\n}',
-      headers: {
-        Authorization: "{{tokenAdmin}}"
-      }
-    });
+  //   postman[Request]({
+  //     name: "Sign Up",
+  //     id: "76919548-a87e-4422-b1c0-960b8ba5b778",
+  //     method: "POST",
+  //     address: "{{appUrl}}/api/users/signUp",
+  //     data:
+  //       '{\n    "name":"{{$randomFullName}}",\n    "email":"{{$randomEmail}}",\n    "password":"{{$randomPassword}}"\n}',
+  //     post(response) {
+  //       pm.test("Successful Sign Up request", function() {
+  //         pm.response.to.have.status(201);
+  //       });
 
-    postman[Request]({
-      name: "SearchBook",
-      id: "e046cde3-a114-41d9-b962-aa233cb3aeb5",
-      method: "GET",
-      address: "localhost:3000/api/books/search/global program",
-      headers: {
-        Authorization: "{{tokenUser}}"
-      }
-    });
+  //       var bodyData = papaparse.parse(response);
+  //       var token = "Token " + bodyData.token;
+  //       pm.environment.set("tokenUser", token);
+  //     }
+  //   });
 
-    postman[Request]({
-      name: "Update Book",
-      id: "78408edc-1bb5-48ce-9671-f0e901e41b5e",
-      method: "PUT",
-      address: "localhost:3000/api/books/update",
-      data:
-        '{\r\n    "id":"{{bookId}}",\r\n    "title": "{{title}}",\r\n    "ISBN": "{{ISBN}}"\r\n}',
-      headers: {
-        Authorization: "{{tokenAdmin}}"
-      }
-    });
-  });
+  //   postman[Request]({
+  //     name: "Get All Users",
+  //     id: "0adcda6d-5f84-4152-87e0-7a974191712c",
+  //     method: "GET",
+  //     address: "{{appUrl}}/api/users/getAllUsers",
+  //     headers: {
+  //       Authorization: "{{tokenAdmin}}"
+  //     },
+  //     post(response) {
+  //       pm.test("Successful get all user request", function() {
+  //         pm.response.to.have.status(200);
+  //       });
+  //     }
+  //   });
+  // });
 
-  group("Author", function() {
-    postman[Request]({
-      name: "Get All Authors",
-      id: "ef1c8305-ab1f-448f-8b0d-eb574f3c9f7a",
-      method: "GET",
-      address: "localhost:3000/api/authors/",
-      headers: {
-        Authorization: "{{tokenAdmin}}"
-      }
-    });
-  });
+  // group("Book", function() {
+  //   postman[Request]({
+  //     name: "Get All Books",
+  //     id: "b0e1ca17-2583-4d18-9932-6c027c072153",
+  //     method: "GET",
+  //     address: "{{appUrl}}/api/books",
+  //     headers: {
+  //       Authorization: "{{tokenUser}}"
+  //     },
+  //     post(response) {
+  //       pm.test("Successful books request", function() {
+  //         pm.response.to.have.status(200);
+  //       });
+  //     }
+  //   });
 
-  group("Orders", function() {
-    postman[Request]({
-      name: "Gett All Orders",
-      id: "2e556b10-9c37-4f56-b390-3971fc84f7fd",
-      method: "GET",
-      address: "localhost:3000/api/orders/",
-      headers: {
-        Authorization: "{{tokenAdmin}}"
-      }
-    });
+  //   postman[Request]({
+  //     name: "AddBook",
+  //     id: "ea21d867-41cf-4788-98e6-474c1c29cfc6",
+  //     method: "POST",
+  //     address: "{{appUrl}}/api/books/addBook",
+  //     data:
+  //       '{\r\n    "title":"{{$randomProductName}}",\r\n    "ISBN":"93434",\r\n    "authors": ["60dabf66ed5cf3ef93ae9e89"]\r\n}',
+  //     headers: {
+  //       Authorization: "{{tokenAdmin}}"
+  //     },
+  //     post(response) {
+  //       pm.test("Successful add Book request", function() {
+  //         pm.expect(pm.response.code).to.be.oneOf([201, 203]);
+  //       });
+  //     }
+  //   });
 
-    postman[Request]({
-      name: "Place Order",
-      id: "e4f4fa04-5ecd-4dbd-938f-50de74486256",
-      method: "POST",
-      address: "localhost:3000/api/orders/placeOrder",
-      data: '{\r\n    "ISBN":"{{orderISBN}}"\r\n}',
-      headers: {
-        Authorization: "{{tokenUser}}"
-      }
-    });
+  //   postman[Request]({
+  //     name: "SearchBook",
+  //     id: "27a5d42d-d73c-4cc1-8ac0-2e5860af250e",
+  //     method: "GET",
+  //     address: "{{appUrl}}/api/books/search/global program",
+  //     headers: {
+  //       Authorization: "{{tokenUser}}"
+  //     },
+  //     post(response) {
+  //       pm.test("Successfull serach request", function() {
+  //         pm.response.to.have.status(200);
+  //       });
+  //     }
+  //   });
 
-    postman[Request]({
-      name: "Return Book",
-      id: "3674146e-d94e-4a64-9d4e-f252a7a95948",
-      method: "PUT",
-      address: "localhost:3000/api/orders/return",
-      data: '{\r\n    "orderId":"{{orderId}}}"\r\n}',
-      headers: {
-        Authorization: "{{tokenAdmin}}"
-      }
-    });
+  //   postman[Request]({
+  //     name: "Update Book",
+  //     id: "6abf350d-a00d-43a0-9c73-d2591ceb3fa8",
+  //     method: "PUT",
+  //     address: "{{appUrl}}/api/books/update",
+  //     data:
+  //       '{\r\n    "id":"60dabf75764eb9efaedd189b",\r\n    "title": "Global Program Technician Updated"\r\n}',
+  //     headers: {
+  //       Authorization: "{{tokenAdmin}}"
+  //     },
+  //     post(response) {
+  //       pm.test("Successfull update request", function() {
+  //         pm.response.to.have.status(200);
+  //       });
+  //     }
+  //   });
+  // });
+
+  // group("Author", function() {
+  //   postman[Request]({
+  //     name: "Get All Authors",
+  //     id: "95a6532b-719b-4121-9486-84ca1d16b544",
+  //     method: "GET",
+  //     address: "{{appUrl}}/api/authors/",
+  //     headers: {
+  //       Authorization: "{{tokenAdmin}}"
+  //     },
+  //     post(response) {
+  //       pm.test("Successfull authors request", function() {
+  //         pm.response.to.have.status(200);
+  //       });
+  //     }
+  //   });
+  // });
+
+  // group("Orders", function() {
+  //   postman[Request]({
+  //     name: "Gett All Orders",
+  //     id: "65b1e7e4-f676-4efd-8900-fc8619828d4f",
+  //     method: "GET",
+  //     address: "{{appUrl}}/api/orders/",
+  //     headers: {
+  //       Authorization: "{{tokenAdmin}}"
+  //     },
+  //     post(response) {
+  //       pm.test("Successfull orders request", function() {
+  //         pm.response.to.have.status(302);
+  //       });
+  //     }
+  //   });
+
+  //   postman[Request]({
+  //     name: "Place Order",
+  //     id: "6545f417-9290-4135-a596-f057a26b1469",
+  //     method: "POST",
+  //     address: "{{appUrl}}/api/orders/placeOrder",
+  //     data: '{\r\n    "ISBN":"72977"\r\n}',
+  //     headers: {
+  //       Authorization: "{{tokenUser}}"
+  //     },
+  //     post(response) {
+  //       pm.test("Successful place order request", function() {
+  //         pm.expect(pm.response.code).to.be.oneOf([203, 201]);
+  //       });
+  //     }
+  //   });
+
+  //   postman[Request]({
+  //     name: "Return Book",
+  //     id: "7a5f93df-0b6c-45b3-9313-f74856970f44",
+  //     method: "PUT",
+  //     address: "{{appUrl}}/api/orders/return",
+  //     data: '{\r\n    "orderId":"60dabfc2ba2a4befff69d4e0"\r\n}',
+  //     headers: {
+  //       Authorization: "{{tokenAdmin}}"
+  //     },
+  //     post(response) {
+  //       pm.test("Successful return bool request", function() {
+  //         pm.response.to.have.status(302);
+  //       });
+  //     }
+  //   });
   });
 }
