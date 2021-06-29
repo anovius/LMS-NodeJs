@@ -13,7 +13,7 @@ postman[Symbol.for("initial")]({
   collection: {
   },
   environment: {
-    appUrl: "http://64.227.10.141",
+    appUrl: "http://localhost:3000",
     tokenAdmin: "",
     tokenUser: ""
   }

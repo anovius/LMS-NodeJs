@@ -9,7 +9,7 @@ mongoose.connect(env_vars.dbUrl, {
     useFindAndModify: true,
     useCreateIndex: true
 }).then((result) => app.listen(env_vars.port || process.env.PORT, () => {
-    console.log('Listening ...');
+    console.log('Listening');
 })).catch((err) => console.log(err))
 
 require('./models/Author')

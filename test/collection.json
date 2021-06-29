@@ -27,11 +27,8 @@
 							}
 						}
 					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -43,9 +40,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{appUrl}}/api/users/login",
+							"raw": "l{{appUrl}}/api/users/login",
 							"host": [
-								"{{appUrl}}"
+								"l{{appUrl}}"
 							],
 							"path": [
 								"api",

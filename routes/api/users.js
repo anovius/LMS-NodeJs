@@ -8,7 +8,7 @@ const auth = require('../../middlewares/auth')
 passport.use(localStrategy)
 Router.use(passport.initialize())
 
-Router.get('/login', passport.authenticate('local', {session:false}), (req, res) => {
+Router.post('/login', passport.authenticate('local', {session:false}), (req, res) => {
     req.user.generateToken()
     res.status(200).send({token: req.user.token, message: 'Logged In Successfully'})
 })
