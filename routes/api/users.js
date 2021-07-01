@@ -4,22 +4,28 @@ const passport = require('passport')
 const localStrategy = require('../../config/passport')
 const User = require('../../models/User')
 const auth = require('../../middlewares/auth')
+const {body, validationResult} = require('express-validator')
 
 passport.use(localStrategy)
 Router.use(passport.initialize())
 
-Router.get('/:email', (req, res) => {
-    console.log(req.params.email)
-    User.findOne({email: req.params.email}, {addresses: { $slice: [0, 1] } ,'_id': false})
-    .exec((err, user) => {
-        if(!err && user !== null){
-            res.status(200).send(user.toJSON())
-        }
-        else{
-            res.status(404).send({message: 'No user exits'})
-        }
-    })
-} )
+Router.get('/:email', body('email').isEmail(), (req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        User.findOne({email: req.params.email}, {addresses: { $slice: [0, 1] } ,'_id': false})
+        .exec((err, user) => {
+            if(!err && user !== null){
+                res.status(200).send(user.toJSON())
+            }
+            else{
+                res.status(404).send({message: 'No user exits'})
+            }
+        })
+    }
+    else{
+        console.log(errors)
+    }
+})
 
 Router.put('/', (req, res) => {
     const name = req.body.name
@@ -53,10 +59,15 @@ Router.put('/', (req, res) => {
 })
 
 Router.delete('/:email', (req, res) => {
-    User.deleteOne({email: req.params.email})
-    .exec((err) => {
-        res.status(200).send({message: 'User deleted Successfully'})
-    })
+    if(typeof req.param.email === 'undefined' || req.param.email === null){
+        res.status(203).send({message: 'Email required!'})
+    }
+    else{
+        User.deleteOne({email: req.params.email})
+        .exec((err) => {
+            res.status(200).send({message: 'User deleted Successfully'})
+        })
+    }
 })
 
 Router.post('/login', passport.authenticate('local', {session:false}), (req, res) => {
@@ -65,6 +76,20 @@ Router.post('/login', passport.authenticate('local', {session:false}), (req, res
 
 Router.post('/signUp', (req, res) => {
     let newUser = User()
+
+    if(typeof req.body.name === 'undefined' || req.body.name === null){
+        res.status(203).send({message: 'Please send name of User'})
+        return
+    }
+    if(typeof req.body.email === 'undefined' || req.body.email === null){
+        res.status(203).send({message: 'Please send mail of User'})
+        return
+    }
+    if(typeof req.body.password === 'undefined' || req.body.password === null){
+        res.status(203).send({message: 'Please send name of User'})
+        return
+    }
+    
     newUser.name = req.body.name
     newUser.email = req.body.email
     newUser.setPassword(req.body.password)

@@ -7,9 +7,13 @@ const mongoose = require('mongoose')
 
 
 Router.get('/:slug', (req, res) => {
+    if(typeof req.params.slug === 'undefined' || req.params.slug === null){
+        res.status(203).send({message: 'Please send slug of order'})
+        return
+    }
     Order.findOne({slug: req.params.slug})
-    .populate('bookId')
-    .populate('userId')
+    .populate('book')
+    .populate('user')
     .exec((err, order) => {
         if(!err && order !== null){
             res.status(200).send(order)
@@ -22,8 +26,8 @@ Router.get('/:slug', (req, res) => {
 
 Router.get('/all/orders', (req, res) => {
     Order.find()
-    .populate('bookId', 'title')
-    .populate('userId', 'email')
+    .populate('book')
+    .populate('user')
     .exec((err, orders) => {
         if(!err && orders !== null){
             res.status(200).send(orders)
@@ -36,14 +40,18 @@ Router.get('/all/orders', (req, res) => {
 
 Router.post('/placeOrder', (req, res) =>{
     const ISBN = req.body.ISBN
+    if(typeof req.body.ISBN === 'undefined' || req.body.ISBN === null){
+        res.status(203).send({message: 'Please send ISBN of book'})
+        return
+    }
     Book.findOne({ISBN: ISBN}, (err, book) => {
         if(!err && book !== null){
             if(book.quantity > 0){
                 book.quantity -= 1
                 book.save()
                 const newOrder = new Order({
-                    userId: req.user._id,
-                    bookId: book._id 
+                    user: req.user._id,
+                    book: book._id 
                 })
                 newOrder.save().then((result) => res.status(201).send({message: 'Order Added Successfully!', order: newOrder}))
                 .catch((err) => res.status(203).send({message:'Something went wrong!'}))
@@ -61,7 +69,7 @@ Router.post('/placeOrder', (req, res) =>{
 Router.put('/return',  auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
     const slug = req.body.slug
     Order.findOne({slug: slug})
-    .populate('bookId')
+    .populate('book')
     .exec((err, order) => {
         if(!err && order !== null){
            var today = new Date()
@@ -70,8 +78,8 @@ Router.put('/return',  auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
            if(diff < 0){
                fine = 500 * diff * -1
            }
-           order.bookId.quantity += 1
-           order.bookId.save()
+           order.book.quantity += 1
+           order.book.save()
            res.status(200).send({message: 'Book Returned Record Updated!', fineToPay: fine + ' PKR'})
         }
         else{
@@ -81,12 +89,16 @@ Router.put('/return',  auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
 })
 
 Router.delete('/:slug', (req, res) => {
+    if(typeof req.params.slug === 'undefined' || req.params.slug === null){
+        res.status(203).send({message: 'Please send slug of order'})
+        return
+    }
     Order.findOne({slug: req.params.slug})
-    .populate('bookId')
+    .populate('book')
     .exec((err, order) => {
         if(!err && order !== null){
-            order.bookId.quantity += 1
-            order.bookId.save()
+            order.book.quantity += 1
+            order.book.save()
         }
     })
     Order.deleteOne({slug: req.params.slug}, (err) => {

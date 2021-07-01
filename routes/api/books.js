@@ -6,6 +6,11 @@ const Author = require('../../models/Author')
 const auth = require('../../middlewares/auth')
 
 Router.get('/:ISBN', (req, res) => {
+    if(typeof req.params.ISBN === 'undefined' || req.params.ISBN === null){
+        res.status(203).send({message: 'Please send slug of author'})
+        return
+    }
+
     Book.findOne({ISBN: req.params.ISBN})
     .populate('authors', 'slug name')
     .exec((err, book) => {
@@ -19,8 +24,20 @@ Router.get('/:ISBN', (req, res) => {
 })
 
 Router.post('/', async (req, res) => {
-    var authors = []
+    if(typeof req.body.title === 'undefined' || req.body.tile === null){
+        res.status(203).send({message: 'Please send title of Book'})
+        return
+    }
+    if(typeof req.body.ISBN === 'undefined' || req.body.ISBN === null){
+        res.status(203).send({message: 'Please send ISBN of Book'})
+        return
+    }
+    if(typeof req.body.authors === 'undefined' || req.body.authors === null){
+        res.status(203).send({message: 'Please send authors of Book'})
+        return
+    }
     
+    var authors = []
     for(var i=0; i<req.body.authors.length; i++){
         const author = await Author.findOne({slug: req.body.authors[i]}).select('_id').exec()
         authors.push(author._id)
@@ -82,6 +99,10 @@ Router.put('/', (req, res) => {
 })
 
 Router.delete('/:ISBN', (req, res) => {
+    if(typeof req.params.slug === 'undefined' || req.param.slug === null){
+        res.status(203).send({message: 'Please send slug of author'})
+        return
+    }
     Book.deleteOne({ISBN: req.params.ISBN}, (err) =>{
         if(!err)
             res.status(200).send({message: 'Book Deleted Successfully'})

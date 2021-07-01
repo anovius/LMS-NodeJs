@@ -6,7 +6,7 @@ const slug = require('slug');
 const authorSchema = mongoose.Schema({
     slug: {type: String, lowercase: true, unique: true},
     name: {type: String, required: true}
-})
+}, {timestamp: true})
 
 authorSchema.plugin(uniqueValidator)
 authorSchema.plugin(mongoosastic)

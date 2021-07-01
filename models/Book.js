@@ -7,7 +7,7 @@ const bookSchema = mongoose.Schema({
     ISBN: {type: String, requires: true, unique: true},
     authors: [{type: mongoose.Schema.Types.ObjectId, ref: 'Author'}],
     quantity: {type: Number, default: 20}
-})
+}, {timestamp: true})
 
 bookSchema.plugin(uniqueValidator)
 bookSchema.plugin(mongoosastic)

@@ -9,8 +9,8 @@ const userSchema = mongoose.Schema({
     name: {type: String, required: true},
     email: {type: String, require: true, unique: true},
     password: {type: String, required: true},
-    userType: {type: Number, enum:[1, 2, 3], require: true, default: 3}, // 1-Admin 2-Librarian 3-User 
-})
+    role: {type: Number, enum:[1, 2, 3], require: true, default: 3}, // 1-Admin 2-Librarian 3-User 
+}, {timestamp: true})
 
 userSchema.plugin(uniqueValidator, {message: 'Error, expected {PATH} to be unique.'})
 userSchema.plugin(mongoosastic)
@@ -37,7 +37,7 @@ userSchema.methods.toJSON = function(){
         token: this.token,
         name: this.name,
         email: this.email, 
-        userType: this.userType
+        role: this.role
     }
 }
 

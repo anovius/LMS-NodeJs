@@ -4,6 +4,12 @@ const auth = require('../../middlewares/auth')
 const Author = require('../../models/Author')
 
 Router.get('/:slug', (req, res) => {
+
+    if(typeof req.params.slug === 'undefined' || req.param.slug === null){
+        res.status(203).send({message: 'Please send slug of author'})
+        return
+    }
+
     Author.findOne({slug: req.params.slug}, (err, author) => {
         if(!err && author !== null){
             res.status(200).send(author.toJSON())
@@ -15,6 +21,11 @@ Router.get('/:slug', (req, res) => {
 })
 
 Router.post('/', (req, res) => {
+    if(typeof req.body.name === 'undefined' || req.body.name === null){
+        res.status(203).send({message: 'Please send name of author'})
+        return
+    }
+
     const newAuthor = new Author({
         name: req.body.name
     })
@@ -48,6 +59,10 @@ Router.get('/all/authors', (req, res) => {
 })
 
 Router.delete('/:slug', (req, res) => {
+    if(typeof req.params.slug === 'undefined' || req.param.slug === null){
+        res.status(203).send({message: 'Please send slug of author'})
+        return
+    }
     Author.deleteOne({slug: req.params.slug}, (err) => {
         if(!err){
             res.status(200).send({message: 'Deleted Successfully!'})
