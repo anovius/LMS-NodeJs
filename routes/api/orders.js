@@ -26,7 +26,7 @@ Router.get('/all/orders', (req, res) => {
     .populate('userId', 'email')
     .exec((err, orders) => {
         if(!err && orders !== null){
-            res.status(302).send(orders)
+            res.status(200).send(orders)
         }
         else{
             res.status(203).send({message: 'No record found'})
@@ -72,7 +72,7 @@ Router.put('/return',  auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
            }
            order.bookId.quantity += 1
            order.bookId.save()
-           res.status(302).send({message: 'Book Returned Record Updated!', fineToPay: fine + ' PKR'})
+           res.status(200).send({message: 'Book Returned Record Updated!', fineToPay: fine + ' PKR'})
         }
         else{
             res.status(203).send({message:'Order not found'})

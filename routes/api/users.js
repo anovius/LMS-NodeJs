@@ -13,7 +13,7 @@ Router.get('/:email', (req, res) => {
     User.findOne({email: req.params.email}, {addresses: { $slice: [0, 1] } ,'_id': false})
     .exec((err, user) => {
         if(!err && user !== null){
-            res.status(302).send(user.toJSON())
+            res.status(200).send(user.toJSON())
         }
         else{
             res.status(404).send({message: 'No user exits'})
