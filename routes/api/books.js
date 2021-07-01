@@ -2,35 +2,39 @@ const express = require('express')
 const Router = express.Router()
 const mongoose = require('mongoose')
 const Book = require('../../models/Book')
+const Author = require('../../models/Author')
 const auth = require('../../middlewares/auth')
 
-Router.get('/', auth.isToken, auth.isUser, (req, res) => {
-    Book.find()
-    .populate('authors', 'name')
-    .exec((err, books) => {
-        if(!err && books !== null){
-            res.status(200).send(books)
+Router.get('/:ISBN', (req, res) => {
+    Book.findOne({ISBN: req.params.ISBN})
+    .populate('authors', 'slug name')
+    .exec((err, book) => {
+        if(!err && book !== null){
+            res.status(200).send(book.toJSON())
         }
         else{
-            res.status(200).send({message: 'No record found'})
+            res.status(200).send({message: 'No Book found'})
         }
     })
 })
 
-Router.post('/addBook', auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
+Router.post('/', async (req, res) => {
     var authors = []
-
-    for(var i=0; i<req.body.authors.length; i++)
-        authors.push(mongoose.Types.ObjectId(req.body.authors[i]))
+    
+    for(var i=0; i<req.body.authors.length; i++){
+        const author = await Author.findOne({slug: req.body.authors[i]}).select('_id').exec()
+        authors.push(author._id)
+    }
 
     const newBook = new Book({
         title: req.body.title,
         ISBN: req.body.ISBN,
         authors: authors 
     })
+
     newBook.save((err, result) => {
         if(!err){
-            res.status(201).send({message: 'Book added Successfully'})
+            res.status(201).send({message: 'Book added Successfully', book: newBook.toJSON()})
         }
         else{
             res.status(203).send({message: 'ISBN is already in use'})
@@ -38,32 +42,26 @@ Router.post('/addBook', auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
     })
 })
 
-Router.get('/search/:title', auth.isToken, auth.isUser, (req, res) => {
-    Book.findOne({title: new RegExp(req.params.title, 'i')})
-    .populate('authors', 'name')
-    .exec((err, book) => {
-        if(!err && book !== null){
-            res.status(200).send(book)
-        }
-        else{
-            res.status(200).send({message: 'No record found'})
-        }
-    })
-})
-
-Router.put('/update', auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
-    if(typeof req.body.id !== 'undefined' && req.body.id !== null){
-        Book.findById(mongoose.Types.ObjectId(req.body.id), (err, book) => {
+Router.put('/', (req, res) => {
+    if(typeof req.body.ISBN !== 'undefined' && req.body.ISBN !== null){
+        Book.findOne({ISBN: req.body.ISBN}, async (err, book) => {
             if(!err && book !== null){
                 const title = req.body.title
                 const ISBN = req.body.ISBN
                 const authors = req.body.authors
-                const isAvailable = req.body.isAvailable
+                const quantity = req.body.quantity
 
                 if(typeof title !== 'undefined' && title !== null) book.title = title
                 if(typeof ISBN !== 'undefined' && ISBN !== null) book.ISBN = ISBN
-                if(typeof authors !== 'undefined' && authors !== null) book.authors = authors
-                if(typeof isAvailable !== 'undefined' && isAvailable !== null) book.isAvailable = isAvailable
+                if(typeof authors !== 'undefined' && authors !== null){
+                    var authorsID = []
+                    for(var i=0; i<req.body.authors.length; i++){
+                        const author = await Author.findOne({slug: req.body.authors[i]}).select('_id').exec()
+                        authorsID.push(author._id)
+                    }
+                    book.authors = authorsID
+                }
+                if(typeof quantity !== 'undefined' && quantity !== null) book.quantity = quantity
 
                 book.save((err, data) => {
                     if(!err) 
@@ -79,9 +77,30 @@ Router.put('/update', auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
         })
     }
     else{
-        res.status(403).send({message: 'Please enter some id of the book'})
+        res.status(403).send({message: 'Please enter ISBN of the book'})
     }
 })
+
+Router.delete('/:ISBN', (req, res) => {
+    Book.deleteOne({ISBN: req.params.ISBN}, (err) =>{
+        if(!err)
+            res.status(200).send({message: 'Book Deleted Successfully'})
+    })
+})
+
+Router.get('/all/books', (req, res) => {
+    Book.find()
+    .populate('authors', 'slug name')
+    .exec((err, books) => {
+        res.status(200).send(books)
+    })
+})
+
+Router.post('/search', (req, res) => {
+
+})
+
+
 
 
 module.exports = Router

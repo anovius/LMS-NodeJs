@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
     name: {type: String, required: true},
     email: {type: String, require: true, unique: true},
     password: {type: String, required: true},
-    userType: {type: Number, require: true, default: 1},
+    userType: {type: Number, enum:[1, 2, 3], require: true, default: 3}, // 1-Admin 2-Librarian 3-User 
 })
 
 userSchema.plugin(uniqueValidator, {message: 'Error, expected {PATH} to be unique.'})
@@ -29,6 +29,16 @@ userSchema.methods.comparePassword = function(pass){
 
 userSchema.methods.generateToken = function(){
     this.token = jsonwebtoken.sign({user: this.email}, 'shhhhh')
+}
+
+userSchema.methods.toJSON = function(){
+    this.generateToken()
+    return{
+        token: this.token,
+        name: this.name,
+        email: this.email, 
+        userType: this.userType
+    }
 }
 
 const User = mongoose.model('User', userSchema)

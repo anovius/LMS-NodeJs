@@ -24,7 +24,7 @@ mongoose.connect(dbLink, {
                     bookId: books[randomBook]._id 
                 })
                 newOrder.save().then((result) => console.log('Order Added!'))
-                .catch((err) => console.log('Can not add Order'))
+                .catch((err) => console.log(err))
             }
             else{
                 console.log('Not enough quantity')

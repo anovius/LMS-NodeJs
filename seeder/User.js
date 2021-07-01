@@ -11,12 +11,10 @@ mongoose.connect(dbLink, {
 })
     .then((result) => {
         for(var i=0; i<100; i++){
-
             let newUser = User()
             newUser.name = faker.name.findName()
             newUser.email = faker.internet.email()
             newUser.setPassword(faker.internet.password())
-            newUser.userType = 1
             newUser.save().then((result) => console.log('User Added!'))
             .catch((err) => console.log(err))
         }

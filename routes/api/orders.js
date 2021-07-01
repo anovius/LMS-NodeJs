@@ -5,21 +5,36 @@ const Order = require('../../models/Order')
 const Book = require('../../models/Book')
 const mongoose = require('mongoose')
 
-Router.get('/', auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
+
+Router.get('/:slug', (req, res) => {
+    Order.findOne({slug: req.params.slug})
+    .populate('bookId')
+    .populate('userId')
+    .exec((err, order) => {
+        if(!err && order !== null){
+            res.status(200).send(order)
+        }
+        else{
+            res.status(203).send({message: 'No record found'})
+        }
+    })
+})
+
+Router.get('/all/orders', (req, res) => {
     Order.find()
-    .populate('bookId', '_id title')
-    .populate('userId', '_id name')
+    .populate('bookId', 'title')
+    .populate('userId', 'email')
     .exec((err, orders) => {
         if(!err && orders !== null){
             res.status(302).send(orders)
         }
         else{
-            res.status(200).send({message: 'No record found'})
+            res.status(203).send({message: 'No record found'})
         }
     })
 })
 
-Router.post('/placeOrder', auth.isToken, auth.isUser, (req, res) =>{
+Router.post('/placeOrder', (req, res) =>{
     const ISBN = req.body.ISBN
     Book.findOne({ISBN: ISBN}, (err, book) => {
         if(!err && book !== null){
@@ -30,7 +45,7 @@ Router.post('/placeOrder', auth.isToken, auth.isUser, (req, res) =>{
                     userId: req.user._id,
                     bookId: book._id 
                 })
-                newOrder.save().then((result) => res.status(201).send({message: 'Order Added Successfully!'}))
+                newOrder.save().then((result) => res.status(201).send({message: 'Order Added Successfully!', order: newOrder}))
                 .catch((err) => res.status(203).send({message:'Something went wrong!'}))
             }
             else{
@@ -44,8 +59,8 @@ Router.post('/placeOrder', auth.isToken, auth.isUser, (req, res) =>{
 })
 
 Router.put('/return',  auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
-    const orderId = req.body.orderId
-    Order.findById(mongoose.Types.ObjectId(orderId))
+    const slug = req.body.slug
+    Order.findOne({slug: slug})
     .populate('bookId')
     .exec((err, order) => {
         if(!err && order !== null){
@@ -61,6 +76,25 @@ Router.put('/return',  auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
         }
         else{
             res.status(203).send({message:'Order not found'})
+        }
+    })
+})
+
+Router.delete('/:slug', (req, res) => {
+    Order.findOne({slug: req.params.slug})
+    .populate('bookId')
+    .exec((err, order) => {
+        if(!err && order !== null){
+            order.bookId.quantity += 1
+            order.bookId.save()
+        }
+    })
+    Order.deleteOne({slug: req.params.slug}, (err) => {
+        if(!err){
+            res.status(200).send({message: 'Deleted Successfully!'})
+        }
+        else{
+            res.status(203).send({message: 'No data exists'})
         }
     })
 })

@@ -1,8 +1,10 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
 const mongoosastic = require('mongoosastic')
+const slug = require('slug')
 
 const orderSchema = mongoose.Schema({
+    slug: {type: String, lowercase: true, unique: true},
     userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     bookId: {type: mongoose.Schema.Types.ObjectId, ref: 'Book'},
     orderDate: {type: Date, default: Date.now},
@@ -11,6 +13,26 @@ const orderSchema = mongoose.Schema({
 
 orderSchema.plugin(uniqueValidator)
 orderSchema.plugin(mongoosastic)
+
+orderSchema.pre('validate', function(next){
+    if(!this.slug)
+      this.slugify()
+    next()
+})
+
+orderSchema.methods.slugify = function(){
+    this.slug = slug('or') + '-' + (Math.random() * Math.pow(36, 6) | 0).toString(36)
+}
+
+orderSchema.methods.toJSON = function(){
+    return{
+        slug: this.slug,
+        userEmail: this.userId.email,
+        bookName: this.bookId.title,
+        orderDate: this.orderDate,
+        expiryDate: this.expiryDate
+    }
+}
 
 const Order = mongoose.model('Order', orderSchema)
 module.exports = Order

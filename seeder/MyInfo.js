@@ -14,16 +14,24 @@ mongoose.connect(dbLink, {
             newUser.name = 'admin'
             newUser.email = 'admin@gmail.com'
             newUser.setPassword('admin123')
-            newUser.userType = 0
+            newUser.userType = 1
             newUser.save().then((result) => console.log('User Added!'))
             .catch((err) => console.log(err))
 
             let newUser2 = User()
-            newUser2.name = 'usman'
-            newUser2.email = 'usman@gmail.com'
-            newUser2.setPassword('usman123')
-            newUser2.userType = 1
+            newUser2.name = 'librariun'
+            newUser2.email = 'lib@gmail.com'
+            newUser2.setPassword('lib123')
+            newUser2.userType = 2
             newUser2.save().then((result) => console.log('User Added!'))
+            .catch((err) => console.log(err))
+
+            let newUser3 = User()
+            newUser3.name = 'usman'
+            newUser3.email = 'usman@gmail.com'
+            newUser3.setPassword('usman123')
+            newUser3.userType = 3
+            newUser3.save().then((result) => console.log('User Added!'))
             .catch((err) => console.log(err))
     })
     .catch((err) => console.log(err))

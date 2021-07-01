@@ -10,7 +10,7 @@ mongoose.connect(dbLink, {
     useCreateIndex: true
 })
     .then((result) => {
-        for(var i=0; i<50; i++){
+        for(var i=0; i<99; i++){
             const newAuthor = new Author({
                 name: faker.name.findName()
             })
