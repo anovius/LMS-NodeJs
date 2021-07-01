@@ -2,6 +2,7 @@ const express = require('express');
 const app = express()
 const mongoose = require('mongoose')
 const env_vars = require('./config')
+const cors = require('cors');
 
 mongoose.connect(env_vars.dbUrl, {
     useNewUrlParser: true,
@@ -17,6 +18,7 @@ require('./models/Book')
 require('./models/Order')
 require('./models/User')
 
+app.use(cors())
 app.use(express.urlencoded({extended:false}))
 app.use(express.json())
 app.use('/', require('./routes'))
