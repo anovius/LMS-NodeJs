@@ -109,11 +109,14 @@ Router.delete('/:ISBN', (req, res) => {
     })
 })
 
-Router.get('/all/books', (req, res) => {
+Router.get('/all/books/:pageNumber/:limit', async (req, res) => {
+    const count = await Book.countDocuments()
     Book.find()
+    .skip((+req.params.pageNumber-1) * +req.params.limit)
+    .limit(+req.params.limit)
     .populate('authors', 'slug name')
     .exec((err, books) => {
-        res.status(200).send(books)
+        res.status(200).send({total: count, books: books})
     })
 })
 

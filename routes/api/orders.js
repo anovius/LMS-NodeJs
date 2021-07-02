@@ -12,7 +12,7 @@ Router.get('/:slug', (req, res) => {
         return
     }
     Order.findOne({slug: req.params.slug})
-    .populate('book')
+    .populate('books', 'title ISBN')
     .populate('user')
     .exec((err, order) => {
         if(!err && order !== null){
@@ -24,13 +24,16 @@ Router.get('/:slug', (req, res) => {
     })
 })
 
-Router.get('/all/orders', (req, res) => {
+Router.get('/all/orders/:pageNumber/:limit', async (req, res) => {
+    const count = await Order.countDocuments()
     Order.find()
-    .populate('book')
+    .skip((+req.params.pageNumber-1) * +req.params.limit)
+    .limit(+req.params.limit)
+    .populate('books', 'title ISBN')
     .populate('user')
     .exec((err, orders) => {
         if(!err && orders !== null){
-            res.status(200).send(orders)
+            res.status(200).send({total: count, Orders: orders})
         }
         else{
             res.status(203).send({message: 'No record found'})
@@ -38,35 +41,40 @@ Router.get('/all/orders', (req, res) => {
     })
 })
 
-Router.post('/placeOrder', (req, res) =>{
+Router.post('/placeOrder', auth.isToken, auth.isUser, async(req, res) =>{
     const ISBN = req.body.ISBN
-    if(typeof req.body.ISBN === 'undefined' || req.body.ISBN === null){
-        res.status(203).send({message: 'Please send ISBN of book'})
+    if(typeof ISBN === 'undefined' || ISBN === null || ISBN.length === 0){
+        res.status(203).send({message: 'Please send ISBN list of books'})
         return
     }
-    Book.findOne({ISBN: ISBN}, (err, book) => {
-        if(!err && book !== null){
-            if(book.quantity > 0){
-                book.quantity -= 1
-                book.save()
-                const newOrder = new Order({
-                    user: req.user._id,
-                    book: book._id 
-                })
-                newOrder.save().then((result) => res.status(201).send({message: 'Order Added Successfully!', order: newOrder}))
-                .catch((err) => res.status(203).send({message:'Something went wrong!'}))
-            }
-            else{
-                res.status(203).send({message:'Not enough quantity exists for this book!'})
-            }
+
+    var books = []
+    console.log(req.user)
+    for(var i=0; i<ISBN.length; i++){
+        const book = await Book.findOne({ISBN: ISBN[i]})
+        console.log(book)
+        if(book === null){
+            res.status(203).send({message: ISBN[i] + ' Book not found'})
+            return
         }
-        else{
-            res.status(203).send({message:'Book not found'})
+        if(book.quantity === 0){
+            res.status(203).send({message: ISBN[i] + ' Not enough quantity'})
+            return
         }
+        books.push(book._id)
+    }
+    const newOrder = new Order({
+        user: req.user._id,
+        books: books
     })
+    newOrder.save().then(async (result) => {
+        await newOrder.populate('user')
+        res.status(201).send({message: 'Order Added Successfully!', order: newOrder})
+    })
+    .catch((err) => res.status(203).send({message:'Something went wrong!'}))
 })
 
-Router.put('/return',  auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
+Router.put('/return', (req, res) => {
     const slug = req.body.slug
     Order.findOne({slug: slug})
     .populate('book')

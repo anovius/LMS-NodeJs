@@ -49,10 +49,14 @@ Router.put('/', (req, res) => {
     })
 })
 
-Router.get('/all/authors', (req, res) => {
-    Author.find((err, data) => {
+Router.get('/all/authors/:pageNumber/:limit', async(req, res) => {
+    const count = await Author.countDocuments()
+    Author.find()
+    .skip((+req.params.pageNumber-1) * +req.params.limit)
+    .limit(+req.params.limit)
+    .exec((err, data) => {
         if(!err && data !== null)
-            res.status(200).send(data)
+            res.status(200).send({total: count, authors: data})
         else
             res.status(203).send({message: 'No data exists'})
     })

@@ -4,12 +4,12 @@ const passport = require('passport')
 const localStrategy = require('../../config/passport')
 const User = require('../../models/User')
 const auth = require('../../middlewares/auth')
-const {body, validationResult} = require('express-validator')
+const {body, validationResult, param} = require('express-validator')
 
 passport.use(localStrategy)
 Router.use(passport.initialize())
 
-Router.get('/:email', body('email').isEmail(), (req, res) => {
+Router.get('/:email', param('email').isEmail(), (req, res) => {
     const errors = validationResult(req)
     if(!errors.isEmpty()){
         User.findOne({email: req.params.email}, {addresses: { $slice: [0, 1] } ,'_id': false})
@@ -104,10 +104,14 @@ Router.post('/signUp', (req, res) => {
     })
 })
 
-Router.get('/getAllUsers',  auth.isToken, auth.isUser, auth.isAdmin, (req, res) => {
-    User.find((err, data) => {
+Router.get('/all/users/:pageNumber/:limit', async (req, res) => {
+    const count = await User.countDocuments()
+    User.find()
+    .skip((+req.params.pageNumber-1) * +req.params.limit)
+    .limit(+req.params.limit)
+    .exec((err, data) => {
         if(!err)
-            res.status(200).send(data)
+            res.status(200).send({total: count, users: data})
         else
             res.send(203).send({message: 'Something went wrong'})
     })

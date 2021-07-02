@@ -6,7 +6,7 @@ const slug = require('slug')
 const orderSchema = mongoose.Schema({
     slug: {type: String, lowercase: true, unique: true},
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    book: {type: mongoose.Schema.Types.ObjectId, ref: 'Book'},
+    books: [{type: mongoose.Schema.Types.ObjectId, ref: 'Book'}],
     orderDate: {type: Date, default: Date.now},
     expiryDate: {type: Date, default: new Date(+new Date() + 5*24*60*60*1000)}
 })
@@ -31,10 +31,7 @@ orderSchema.methods.toJSON = function(){
             name: this.user.name,
             email: this.user.email
         },
-        book: {
-            title: this.book.title,
-            ISBN: this.book.ISBN
-        },
+        books: this.books,
         orderDate: this.orderDate,
         expiryDate: this.expiryDate
     }
