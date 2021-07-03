@@ -76,24 +76,29 @@ Router.post('/placeOrder', auth.isToken, auth.isUser, async(req, res) =>{
 
 Router.put('/return', (req, res) => {
     const slug = req.body.slug
+    var fine = 0
     Order.findOne({slug: slug})
-    .populate('book')
+    .populate('books')
     .exec((err, order) => {
         if(!err && order !== null){
            var today = new Date()
-           var fine = 0
            var diff = Math.round((order.expiryDate-today)/(1000*60*60*24))
            if(diff < 0){
                fine = 500 * diff * -1
            }
-           order.book.quantity += 1
-           order.book.save()
-           res.status(200).send({message: 'Book Returned Record Updated!', fineToPay: fine + ' PKR'})
+           
+           for(var i=0; i<order.books.length;i++){
+                order.books[i].quantity += 1
+                order.books[i].save()
+           }
         }
         else{
             res.status(203).send({message:'Order not found'})
         }
     })
+
+    deleteOrder(slug)
+    res.status(200).send({message: 'Book Returned Record Updated!', fineToPay: fine + ' PKR'})
 })
 
 Router.delete('/:slug', (req, res) => {
@@ -102,21 +107,24 @@ Router.delete('/:slug', (req, res) => {
         return
     }
     Order.findOne({slug: req.params.slug})
-    .populate('book')
+    .populate('books')
     .exec((err, order) => {
         if(!err && order !== null){
-            order.book.quantity += 1
-            order.book.save()
+            for(var i=0; i<order.books.length;i++){
+                order.books[i].quantity += 1
+                order.books[i].save()
+           }
         }
     })
-    Order.deleteOne({slug: req.params.slug}, (err) => {
-        if(!err){
-            res.status(200).send({message: 'Deleted Successfully!'})
-        }
-        else{
-            res.status(203).send({message: 'No data exists'})
-        }
-    })
+
+    deleteOrder(req.params.slug)
+    res.status(200).send({message: 'Deleted Successfully!'})
 })
+
+function deleteOrder(slug){
+    Order.deleteOne({slug:slug}, (err) => {
+
+    })
+}
 
 module.exports = Router

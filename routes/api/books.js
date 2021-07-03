@@ -121,10 +121,19 @@ Router.get('/all/books/:pageNumber/:limit', async (req, res) => {
 })
 
 Router.post('/search', (req, res) => {
+    const keyword = req.body.keyword
+    
+    if(typeof keyword === 'undefined' || keyword === null){
+        res.status(203).send({message: 'Please provide some keyword to search!'})
+        return
+    }
 
+    Book.find({$or: [ { title: new RegExp(keyword, 'i') }, { ISBN: new RegExp(keyword, 'i') } ]})
+    .populate('authors')
+    .exec((err, books) => {
+        res.status(200).send(books)
+    })
 })
-
-
 
 
 module.exports = Router
