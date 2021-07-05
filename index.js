@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const env_vars = require('./config')
-const cors = require('cors');
+const cors = require('cors')
 
 mongoose.connect(env_vars.dbUrl, {
     useNewUrlParser: true,
@@ -22,6 +22,10 @@ app.use(cors())
 app.use(express.urlencoded({extended:false}))
 app.use(express.json())
 app.use('/', require('./routes'))
+
+app.use(function(error, req, res, next) {
+    
+})
 
 app.use((req, res, next) => {
     res.status(404).send('Not Found')

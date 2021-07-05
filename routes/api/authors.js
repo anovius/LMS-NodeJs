@@ -2,6 +2,7 @@ const express = require('express')
 const Router = express.Router()
 const auth = require('../../middlewares/auth')
 const Author = require('../../models/Author')
+const Book = require('../../models/Book')
 
 Router.get('/:slug', (req, res) => {
 
@@ -62,17 +63,25 @@ Router.get('/all/authors/:pageNumber/:limit', async(req, res) => {
     })
 })
 
-Router.delete('/:slug', (req, res) => {
-    if(typeof req.params.slug === 'undefined' || req.param.slug === null){
+Router.delete('/:slug', async (req, res) => {
+    if(typeof req.params.slug === 'undefined' || req.params.slug === null){
         res.status(203).send({message: 'Please send slug of author'})
         return
     }
-    Author.deleteOne({slug: req.params.slug}, (err) => {
-        if(!err){
-            res.status(200).send({message: 'Deleted Successfully!'})
+
+    const author = await Author.findOne({slug: req.params.slug})
+    if(author === null) {
+        res.status(404).send({message: 'Author not found!'})
+        return
+    }
+    Book.find({authors: author._id}, (err, book) => {
+        if(book.length>0){
+            res.status(203).send({message: 'You can not delete this author as this appears in books!'})
+            return
         }
         else{
-            res.status(203).send({message: 'No data exists'})
+            author.deleteOne()
+            res.status(200).send({message: 'Author deleted Successfully!'})
         }
     })
 })

@@ -3,6 +3,7 @@ const Router = express.Router()
 const mongoose = require('mongoose')
 const Book = require('../../models/Book')
 const Author = require('../../models/Author')
+const Order = require('../../models/Order')
 const auth = require('../../middlewares/auth')
 
 Router.get('/:ISBN', (req, res) => {
@@ -40,6 +41,10 @@ Router.post('/', async (req, res) => {
     var authors = []
     for(var i=0; i<req.body.authors.length; i++){
         const author = await Author.findOne({slug: req.body.authors[i]}).select('_id').exec()
+        if(author === null){
+            res.status(203).send({message: 'Author not found '+ req.body.authors[i]})
+            return
+        }
         authors.push(author._id)
     }
 
@@ -98,14 +103,26 @@ Router.put('/', (req, res) => {
     }
 })
 
-Router.delete('/:ISBN', (req, res) => {
-    if(typeof req.params.slug === 'undefined' || req.param.slug === null){
-        res.status(203).send({message: 'Please send slug of author'})
+Router.delete('/:ISBN', async (req, res) => {
+    if(typeof req.params.ISBN === 'undefined' || req.params.ISBN === null){
+        res.status(203).send({message: 'Please send ISBN of book'})
         return
     }
-    Book.deleteOne({ISBN: req.params.ISBN}, (err) =>{
-        if(!err)
-            res.status(200).send({message: 'Book Deleted Successfully'})
+
+    const book = await Book.findOne({ISBN: req.params.ISBN})
+    if(book === null) {
+        res.status(404).send({message: 'Book not found!'})
+        return
+    }
+    Order.find({books: book._id}, (err, order) => {
+        if(order.length>0){
+            res.status(203).send({message: 'You can not delete this book as this appears in orders!'})
+            return
+        }
+        else{
+            book.deleteOne()
+            res.status(200).send({message: 'Book deleted Successfully!'})
+        }
     })
 })
 

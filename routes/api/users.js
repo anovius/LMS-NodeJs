@@ -3,6 +3,7 @@ const Router = express.Router()
 const passport = require('passport')
 const localStrategy = require('../../config/passport')
 const User = require('../../models/User')
+const Order = require('../../models/Order')
 const auth = require('../../middlewares/auth')
 const {body, validationResult, param} = require('express-validator')
 
@@ -58,16 +59,28 @@ Router.put('/', (req, res) => {
 
 })
 
-Router.delete('/:email', (req, res) => {
-    if(typeof req.param.email === 'undefined' || req.param.email === null){
+Router.delete('/:email', async (req, res) => {
+    if(typeof req.params.email === 'undefined' || req.params.email === null){
         res.status(203).send({message: 'Email required!'})
+        return
     }
-    else{
-        User.deleteOne({email: req.params.email})
-        .exec((err) => {
-            res.status(200).send({message: 'User deleted Successfully'})
-        })
+
+    const user = await User.findOne({email: req.params.email})
+    if(user === null) {
+        res.status(404).send({message: 'User not found!'})
+        return
     }
+    
+    Order.find({user: user._id}, (err, order) => {
+        if(order.length>0){
+            res.status(203).send({message: 'You can not delete this user as this user has books to return!'})
+            return
+        }
+        else{
+            user.deleteOne()
+            res.status(200).send({message: 'User deleted Successfully!'})
+        }
+    })
 })
 
 Router.post('/login', passport.authenticate('local', {session:false}), (req, res) => {
