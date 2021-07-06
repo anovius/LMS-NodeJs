@@ -6,9 +6,12 @@ const Author = require('../../models/Author')
 const Order = require('../../models/Order')
 const auth = require('../../middlewares/auth')
 
+// TODO Book.findOne this code repeats 3 times in this file 
+// 1. there is a router middleware of param use that to avoid the repetition
+
 Router.get('/:ISBN', (req, res) => {
     if(typeof req.params.ISBN === 'undefined' || req.params.ISBN === null){
-        res.status(203).send({message: 'Please send slug of author'})
+        res.status(203).send({message: 'Please send slug of author'}) // TODO use proper message for user > it should be 'slug is required'
         return
     }
 
@@ -25,6 +28,7 @@ Router.get('/:ISBN', (req, res) => {
 })
 
 Router.post('/', async (req, res) => {
+    // TODO here you didn't check the ISBN unique > create a validator for that add it here just like an email
     if(typeof req.body.title === 'undefined' || req.body.tile === null){
         res.status(203).send({message: 'Please send title of Book'})
         return

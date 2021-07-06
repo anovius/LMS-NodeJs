@@ -5,7 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+// TODO add the script to run the server
+
+// TODO add the script to start the seed server
+
+// TODO add the script to test the server postman collection
+
+
   },
+  
   "author": "",
   "license": "ISC",
   "dependencies": {
