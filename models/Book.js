@@ -10,8 +10,6 @@ const bookSchema = mongoose.Schema({
 }, {timestamp: true})
 
 bookSchema.plugin(uniqueValidator)
-// TODO where you used this library. if there is no use of this remove this
-
 bookSchema.plugin(mongoosastic)
 
 bookSchema.methods.toJSON = function(){

@@ -1,5 +1,4 @@
 const express = require('express')
-// TODO Router is const. it should be in camelcase
 const Router = express.Router()
 const auth = require('../../middlewares/auth')
 const Author = require('../../models/Author')
@@ -8,9 +7,12 @@ const Book = require('../../models/Book')
 // TODO Author.findOne this code repeats 4 times in this file 
 // 1. there is a router middleware of param use that to avoid the repetition
 
+Router.param('slug', (req, res) => {
+    
+})
+
 Router.get('/:slug', (req, res) => {
-// TODO req.param.slug spell mistake
-    if(typeof req.params.slug === 'undefined' || req.param.slug === null){
+    if(typeof req.params.slug === 'undefined' || req.params.slug === null){
         res.status(203).send({message: 'Please send slug of author'})
         return
     }
@@ -26,7 +28,6 @@ Router.get('/:slug', (req, res) => {
 })
 
 Router.post('/', (req, res) => {
-    // TODO add the express validator here for furthor improvements otherwise its ok
     if(typeof req.body.name === 'undefined' || req.body.name === null){
         res.status(203).send({message: 'Please send name of author'})
         return
@@ -56,7 +57,7 @@ Router.put('/', (req, res) => {
 })
 
 Router.get('/all/authors/:pageNumber/:limit', async(req, res) => {
-    // TODO add the search query here what if we need to search the author
+    // TODO add the search query here what if we need to search the author  
     
     const count = await Author.countDocuments()
     Author.find()

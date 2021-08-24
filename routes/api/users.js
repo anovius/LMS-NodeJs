@@ -87,6 +87,10 @@ Router.post('/login', passport.authenticate('local', {session:false}), (req, res
     res.status(200).send(req.user.toJSON())
 })
 
+Router.get('/get/currentUser', auth.isToken, auth.isUser, (req, res) => {
+    res.status(200).send(req.user.toJSON())
+})
+
 Router.post('/signUp', (req, res) => {
     let newUser = User()
 

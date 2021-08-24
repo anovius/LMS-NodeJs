@@ -9,7 +9,6 @@ const authorSchema = mongoose.Schema({
 }, {timestamp: true})
 
 authorSchema.plugin(uniqueValidator)
-// TODO where you used this library. if there is no use of this remove this
 authorSchema.plugin(mongoosastic)
 
 authorSchema.pre('validate', function(next){
