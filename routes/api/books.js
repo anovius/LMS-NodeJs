@@ -9,13 +9,13 @@ const auth = require('../../middlewares/auth')
 // TODO Book.findOne this code repeats 3 times in this file 
 // 1. there is a router middleware of param use that to avoid the repetition
 
-Router.get('/:ISBN', (req, res) => {
-    if(typeof req.params.ISBN === 'undefined' || req.params.ISBN === null){
+Router.post('/cart', (req, res) => {
+    if(typeof req.body.ISBN === 'undefined' || req.body.ISBN === null){
         res.status(203).send({message: 'Please send slug of author'}) // TODO use proper message for user > it should be 'slug is required'
         return
     }
 
-    Book.findOne({ISBN: req.params.ISBN})
+    Book.find({ISBN: {$in: req.body.ISBN}})
     .populate('authors', 'slug name')
     .exec((err, book) => {
         if(!err && book !== null){
@@ -130,7 +130,7 @@ Router.delete('/:ISBN', async (req, res) => {
     })
 })
 
-Router.get('/all/books/:pageNumber/:limit', async (req, res) => {
+Router.get('/all/books/:pageNumber/:limit', auth.isToken, auth.isUser, async (req, res) => {
     const count = await Book.countDocuments()
     Book.find()
     .skip((+req.params.pageNumber-1) * +req.params.limit)
