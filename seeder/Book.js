@@ -19,6 +19,7 @@ mongoose.connect(dbLink, {
                     var auth3 = Math.floor(Math.random() * 50)
                     const newBook = new Book({
                         title: faker.name.title(),
+                        cover: faker.image.business(),
                         ISBN: faker.datatype.number(),
                         authors: [data[auth1]._id, data[auth2]._id, data[auth3]._id],
                         quantity: Math.floor(Math.random() * 20) + 10

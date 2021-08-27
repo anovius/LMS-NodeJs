@@ -4,6 +4,7 @@ const mongoosastic = require('mongoosastic')
 
 const bookSchema = mongoose.Schema({
     title: {type: String, required: true},
+    cover: {type: String, required: true},
     ISBN: {type: String, requires: true, unique: true},
     authors: [{type: mongoose.Schema.Types.ObjectId, ref: 'Author'}],
     quantity: {type: Number, default: 20}
