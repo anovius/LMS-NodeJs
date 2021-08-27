@@ -16,6 +16,7 @@ bookSchema.plugin(mongoosastic)
 bookSchema.methods.toJSON = function(){
     return{
         title: this.title,
+        cover: this.cover,
         ISBN: this.ISBN,
         quantity: this.quantity,
         authors: this.authors

@@ -41,13 +41,9 @@ Router.get('/all/orders/:pageNumber/:limit', async (req, res) => {
     })
 })
 
-Router.post('/placeOrder', auth.isToken, auth.isUser, async(req, res) =>{
-    const ISBN = req.body.ISBN
-    if(typeof ISBN === 'undefined' || ISBN === null || ISBN.length === 0){
-        res.status(203).send({message: 'Please send ISBN list of books'})
-        return
-    }
+Router.get('/cart/checkout', auth.isToken, auth.isUser, async(req, res) =>{
 
+    var ISBN = req.user.cart;
     var books = []
     console.log(req.user)
     for(var i=0; i<ISBN.length; i++){
@@ -61,6 +57,8 @@ Router.post('/placeOrder', auth.isToken, auth.isUser, async(req, res) =>{
             res.status(203).send({message: ISBN[i] + ' Not enough quantity'})
             return
         }
+        book.quantity = book.quantity - 1;
+        await book.save();
         books.push(book._id)
     }
     const newOrder = new Order({
@@ -69,6 +67,8 @@ Router.post('/placeOrder', auth.isToken, auth.isUser, async(req, res) =>{
     })
     newOrder.save().then(async (result) => {
         await newOrder.populate('user')
+        req.user.cart = []
+        await req.user.save()
         res.status(201).send({message: 'Order Added Successfully!', order: newOrder})
     })
     .catch((err) => res.status(203).send({message:'Something went wrong!'}))
@@ -125,6 +125,13 @@ Router.get('/get/cart', auth.isToken, auth.isUser, (req ,res) => {
             res.status(203).send({message: 'Your cart is empty'})
         }
     })
+});
+
+Router.get('/clear/cart', auth.isToken, auth.isUser, (req, res) => {
+    req.user.cart = []
+    req.user.save().then((result) => {
+        res.status(201).send({message: 'Cart Cleared!'})
+    }).catch((err) => res.status(203).send({message:'Something went wrong!'}))
 });
 
 Router.delete('/:slug', (req, res) => {

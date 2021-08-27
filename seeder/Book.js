@@ -13,13 +13,13 @@ mongoose.connect(dbLink, {
     .then((result) => {
         Author.find().select('_id').exec((err, data)=> {
             if(!err){
-                for(var i=0; i<1000; i++){
+                for(var i=0; i<200; i++){
                     var auth1 = Math.floor(Math.random() * 50)
                     var auth2 = Math.floor(Math.random() * 50)
                     var auth3 = Math.floor(Math.random() * 50)
                     const newBook = new Book({
                         title: faker.name.title(),
-                        cover: faker.image.business(),
+                        cover: faker.image.image(),
                         ISBN: faker.datatype.number(),
                         authors: [data[auth1]._id, data[auth2]._id, data[auth3]._id],
                         quantity: Math.floor(Math.random() * 20) + 10
