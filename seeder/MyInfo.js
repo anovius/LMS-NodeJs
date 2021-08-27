@@ -29,7 +29,7 @@ mongoose.connect(dbLink, {
             let newUser3 = User()
             newUser3.name = 'usman'
             newUser3.email = 'usman@gmail.com'
-            newUser3.setPassword('usman123')
+            newUser3.setPassword('1234')
             newUser3.userType = 3
             newUser3.save().then((result) => console.log('User Added!'))
             .catch((err) => console.log(err))

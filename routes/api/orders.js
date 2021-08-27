@@ -101,6 +101,32 @@ Router.put('/return', (req, res) => {
     res.status(200).send({message: 'Book Returned Record Updated!', fineToPay: fine + ' PKR'})
 })
 
+Router.post('/addTOCart/:book', auth.isToken, auth.isUser, (req, res) => {
+    if(req.user.cart.includes(req.params.book)){
+        res.status(203).send({message: 'Already in cart'})
+        return
+    }
+    req.user.cart.push(req.params.book);
+    req.user.save().then((result) => {
+        res.status(201).send({message: 'Book Added to Cart!'})
+    }
+    ).catch((err) => res.status(203).send({message:'Something went wrong!'}))
+});
+
+Router.get('/get/cart', auth.isToken, auth.isUser, (req ,res) => {
+    console.log("called mee")
+    console.log(req.user.cart);
+    Book.find({ISBN: {$in: req.user.cart}})
+    .exec((err, books) => {
+        if(!err && books !== null){
+            res.status(200).send(books)
+        }
+        else{
+            res.status(203).send({message: 'Your cart is empty'})
+        }
+    })
+});
+
 Router.delete('/:slug', (req, res) => {
     if(typeof req.params.slug === 'undefined' || req.params.slug === null){
         res.status(203).send({message: 'Please send slug of order'})

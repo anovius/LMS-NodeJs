@@ -9,6 +9,9 @@ const userSchema = mongoose.Schema({
     name: {type: String, required: true},
     email: {type: String, require: true, unique: true},
     password: {type: String, required: true},
+    cart: [{
+        type: String,
+    }],
     role: {type: Number, enum:[1, 2, 3], require: true, default: 3}, // 1-Admin 2-Librarian 3-User 
 }, {timestamp: true})
 
