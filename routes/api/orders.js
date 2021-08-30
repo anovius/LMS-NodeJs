@@ -24,6 +24,20 @@ Router.get('/:slug', (req, res) => {
     })
 })
 
+Router.get('/my/orders', auth.isToken, auth.isUser, (req, res) => {
+    Order.find({user: req.user._id})
+    .populate('books')
+    .populate('user')
+    .exec((err, orders) => {
+        if(!err && orders !== null){
+            res.status(200).send(orders)
+        }
+        else{
+            res.status(203).send({message: 'No record found'})
+        }
+    })
+});
+
 Router.get('/all/orders/:pageNumber/:limit', async (req, res) => {
     const count = await Order.countDocuments()
     Order.find()
