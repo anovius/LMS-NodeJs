@@ -93,7 +93,7 @@ Router.put('/', (req, res) => {
                     if(!err) 
                         res.status(200).send({message: 'Book updated!', book: book})
                     else
-                        res.status(203).send({message: 'ISBN already in use'})
+                        res.status(203).send({message: 'ISBN already exists'})
                 })
 
             }
