@@ -33,7 +33,7 @@ Router.get('/my/orders', auth.isToken, auth.isUser, (req, res) => {
             res.status(200).send(orders)
         }
         else{
-            res.status(203).send({message: 'No record found'})
+            res.status(203).send({message: 'No Orders found'})
         }
     })
 });
